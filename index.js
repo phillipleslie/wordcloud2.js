@@ -155,6 +155,8 @@ jQuery(function($) {
   var $height = $('#config-height');
   var $mask = $('#config-mask');
   var $dppx = $('#config-dppx');
+  var $scalemax = $('#config-scalemax');
+  var $scalemin = $('#config-scalemin');
   var $css = $('#config-css');
   var $webfontLink = $('#link-webfont');
 
@@ -373,6 +375,7 @@ jQuery(function($) {
     }
 
     // Put the word list into options
+    var scalemax = $scalemax.val();
     if ($list.val()) {
       var list = [];
       $.each($list.val().split('\n'), function each(i, line) {
@@ -383,6 +386,29 @@ jQuery(function($) {
         var count = parseFloat(lineArr.shift()) || 0;
         list.push([lineArr.join(' '), count]);
       });
+
+      var maxOccurrences = Math.max.apply(Math,list.map(function(a){return a[1];}));
+      var minOccurrences = Math.min.apply(Math,list.map(function(a){return a[1];}));
+
+      // If any occurrence counts exceed scalemax, apply log10 transform
+      if (maxOccurrences>scalemax) {
+        var minLog = Math.log10(minOccurrences);
+        var maxLog = Math.log10(maxOccurrences);
+        var rangeLog = maxLog - minLog;
+
+        list = list.map(function(a){
+            a[1] = Math.ceil(((Math.log10(a[1]) - minLog) / rangeLog)*scalemax);
+            return a;
+        });
+      }
+
+      // Clamp to minimum scale
+      var scalemin = $scalemin.val();
+      list = list.map(function(a){
+          a[1] = Math.max(a[1],scalemin);
+          return a;
+      });
+      
       options.list = list;
     }
 

@@ -185,7 +185,22 @@
               <span class="add-on">x</span>
             </div>
             <span class="help-block">Adjust the weight, grid size, and canvas pixel size for high pixel density displays.</span>
+            <label for="config-height">Trigger log10 rescale if any occurrence counts exceed</label>
+            <div class="input-append">
+              <input type="number" id="config-scalemax" class="input-mini" min="1" value="12" required>
+              <span class="add-on">occurrences</span>
+            </div>
+            <span class="help-block">Conserve memory at canvas rendering time, by rescaling via log10 if any occurrence counts exceed this.</span>
+
+            <label for="config-height">Enforce minimum scale</label>
+            <div class="input-append">
+              <input type="number" id="config-scalemin" class="input-mini" min="1" value="2" required>
+              <span class="add-on">occurrences</span>
+            </div>
+            <span class="help-block">Clamp any smaller occurrence counts to this minimum.</span>
+
           </div>
+
           <div class="tab-pane" id="tab-mask">
             <label for="config-mask">Image mask</label>
             <input type="file" id="config-mask"><button id="config-mask-clear" class="btn" type="button">Clear</button>
